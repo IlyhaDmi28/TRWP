@@ -1,0 +1,36 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Task2</title>
+</head>
+<body>
+    <h2>Random Numbers Generator</h2>
+    <form id="randomNumbersForm">
+        <label for="nInput">N:</label>
+        <input type="number" id="nInput" name="nInput"><br><br>
+        <button type="button" onclick="generateRandomNumbers()">Generate Random Numbers</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        function generateRandomNumbers() {
+            var n = document.getElementById("nInput").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/");
+            xhr.setRequestHeader("X-Rand-N", n);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var randomNumbers = JSON.parse(xhr.responseText);
+                    document.getElementById("result").innerHTML = "<h3>Generated Random Series:</h3><ul>";
+                    randomNumbers.forEach((num) => {
+                        document.getElementById("result").innerHTML += "<li>" + num + "</li>";
+                    });
+                    document.getElementById("result").innerHTML += "</ul>";
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</body>
+</html>

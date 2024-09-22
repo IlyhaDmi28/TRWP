@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+
+    <script>
+         function displayBrowserInfo() {
+            var info = document.createTextNode("UserAgent: " + navigator.userAgent);
+            var appCodeName = document.createTextNode("appCodeName: " + navigator.appCodeName);
+            var appName = document.createTextNode("appName: " + navigator.appName);
+            var appVersion = document.createTextNode("appVersion: " + navigator.appVersion);
+            var newLine = document.createElement('br');
+            document.body.appendChild(newLine);
+            document.body.appendChild(info);
+            document.body.appendChild(newLine.cloneNode());
+            document.body.appendChild(appCodeName);
+            document.body.appendChild(newLine.cloneNode());
+            document.body.appendChild(appName);
+            document.body.appendChild(newLine.cloneNode());
+            document.body.appendChild(appVersion);
+            console.log("Hello World");
+        } 
+    </script>
+
+</head>
+<body>
+    <h1>Лабораторная работа 1</h1>
+    <button onclick="displayBrowserInfo()">Информация о браузере</button>
+    <p>Перейти на <a href="https://www.belstu.by/">сайт БГТУ</a></p>
+</body>
+</html>

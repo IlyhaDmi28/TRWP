@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Task3</title>
+</head>
+<body>
+    <form id="unitedForm">
+        <label for="xInput">X:</label>
+        <input type="number" id="xInput" name="xInput"><br><br>
+        <label for="yInput">Y:</label>
+        <input type="number" id="yInput" name="yInput"><br><br>
+        <br><br>
+        <label for="nInput">N:</label>
+        <input type="number" id="nInput" name="nInput"><br><br>
+        <button type="button" id="syncSubmit">Syncs</button>
+        <button type="button" id="asyncSubmit">Async</button>
+        <div id="result1"></div>
+        <div id="result2"></div>
+    </form>
+
+    <script>
+        const asyncSubmit = document.getElementById('asyncSubmit');
+        const syncSubmit = document.getElementById('syncSubmit');
+
+        asyncSubmit.addEventListener('click', async (e) => {
+            var x = document.getElementById("xInput").value;
+            var y = document.getElementById("yInput").value;
+            var n = document.getElementById("nInput").value;
+
+            const xhrA = new XMLHttpRequest();
+            xhrA.open('POST', '/a', true);
+            xhrA.setRequestHeader('Content-Type', 'text/plain');
+            xhrA.setRequestHeader('X-value-x', x);
+            xhrA.setRequestHeader('X-value-y', y);
+
+            xhrA.onload = function () {
+                if (this.readyState === 4 && xhrA.status === 200) {
+                    var z = xhrA.getResponseHeader("X-Value-Z");
+                    document.getElementById("result1").innerHTML = "Z: " + z;
+                }
+            };
+
+            xhrA.send();
+
+            const xhrB = new XMLHttpRequest();
+            xhrB.open('POST', '/b', true);
+            xhrB.setRequestHeader('Content-Type', 'application/json');
+            xhrB.setRequestHeader('X-rand-n', n);
+
+            xhrB.onload = function () {
+                if (this.readyState === 4 && xhrB.status === 200) {
+                    var randomNumbers = JSON.parse(xhrB.responseText);
+                    document.getElementById("result2").innerHTML = "<h3>Generated Random Series:</h3><ul>";
+                    randomNumbers.forEach((num) => {
+                        document.getElementById("result2").innerHTML += "<li>" + num + "</li>";
+                    });
+                    document.getElementById("result2").innerHTML += "</ul>";
+                }
+            };
+
+            xhrB.send();
+        });
+
+        syncSubmit.addEventListener('click', (e) => {
+            var x = document.getElementById("xInput").value;
+            var y = document.getElementById("yInput").value;
+            var n = document.getElementById("nInput").value;
+
+            const xhrA = new XMLHttpRequest();
+            xhrA.open('POST', '/a', false);
+            xhrA.setRequestHeader('Content-Type', 'text/plain');
+            xhrA.setRequestHeader('X-value-x', x);
+            xhrA.setRequestHeader('X-value-y', y);
+
+            xhrA.onload = function () {
+                if (this.readyState === 4 && xhrA.status === 200) {
+                    var z = xhrA.getResponseHeader("X-Value-Z");
+                    document.getElementById("result1").innerHTML = "Z: " + z;
+                }
+            };
+            xhrA.send();
+
+            const xhrB = new XMLHttpRequest();
+            xhrB.open('POST', '/b', false);
+            xhrB.setRequestHeader('Content-Type', 'application/json');
+            xhrB.setRequestHeader('X-rand-n', n);
+
+            xhrB.onload = function () {
+                if (this.readyState === 4 && xhrB.status === 200) {
+                    var randomNumbers = JSON.parse(xhrB.responseText);
+                    document.getElementById("result2").innerHTML = "<h3>Generated Random Series:</h3><ul>";
+                    randomNumbers.forEach((num) => {
+                        document.getElementById("result2").innerHTML += "<li>" + num + "</li>";
+                    });
+                    document.getElementById("result2").innerHTML += "</ul>";
+                }
+            };
+            xhrB.send();
+
+        });
+    </script>
+</body>
+</html>
